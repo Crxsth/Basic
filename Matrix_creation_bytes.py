@@ -57,7 +57,8 @@ lastrow = int(NumBytes) #Transforma a integer
 matriz = [[0] * lastcol for i in range(lastrow)]  ##Crea una matriz, redim(1 to Lastrow, 1 to lastcol)
 #pattern = re.compile(r"<v>(.*?)</v>")
 #valores_raw = pattern.findall(sheet_str)
-print("Ejemplo para git")
+
+
 
 
 Timer1 = time.time()
