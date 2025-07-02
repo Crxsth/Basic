@@ -3,7 +3,6 @@
 El objetivo de este módulo es almacenar los valores de un excel.
 Se busca iterar el xml 'sheet1' e ir agregando los valores a una lista_var. Y al cambiar de row, añadirla a matriz y luego lista_var = []
 """
-
 import zipfile
 import time
 import tkinter as tk
@@ -15,19 +14,23 @@ root.withdraw()
 #ruta_completa = r"C:\Users\criis\OneDrive\Documentos\Coding\Ejemplo Transacciones por report.xlsm"
 
 ruta_completa = filedialog.askopenfilename(
-    initialdir=r"C:\Users\criis\OneDrive\Documentos\Coding",
+    initialdir= r"C:\Users\criis\Documents\Coding"
     title="Selecciona el archivo de Excel",
     filetypes=[("Archivos de Excel", "*.xlsm *.xlsx"), ("Todos los archivos", "*.*")]
 )
 if not ruta_completa:
-    ruta_completa = r"C:\Users\criis\OneDrive\Documentos\Coding\Ejemplo Transacciones por report.xlsm"
+    #ruta_completa = r"C:\Users\criis\OneDrive\Documentos\Coding\Ejemplo Transacciones por report.xlsm"
+    ruta_completa = r"C:\Users\criis\Documents\Coding"
 #ruta_completa = r"C:\Users\criis\OneDrive\Documentos\Coding\Ejemplo Transacciones por report.xlsm"
 Timer0 = time.time()
 print(f"Usando el archivo {ruta_completa}")
 
 
 ##Objetos base antes de iterar:
+print("ruta completa = " + ruta_completa)
+exit()
 lectura = zipfile.ZipFile(ruta_completa, "r")
+
 sharedstring_xml = lectura.read("xl/sharedStrings.xml")
 sharedstr_list = []
 ##Creamos una lista con todos los valores de sharedstrings
