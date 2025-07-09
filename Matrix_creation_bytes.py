@@ -14,23 +14,19 @@ root.withdraw()
 #ruta_completa = r"C:\Users\criis\OneDrive\Documentos\Coding\Ejemplo Transacciones por report.xlsm"
 
 ruta_completa = filedialog.askopenfilename(
-    initialdir= r"C:\Users\criis\Documents\Coding"
+    initialdir=r"C:\Users\criis\Documents\Coding",
     title="Selecciona el archivo de Excel",
     filetypes=[("Archivos de Excel", "*.xlsm *.xlsx"), ("Todos los archivos", "*.*")]
 )
 if not ruta_completa:
-    #ruta_completa = r"C:\Users\criis\OneDrive\Documentos\Coding\Ejemplo Transacciones por report.xlsm"
-    ruta_completa = r"C:\Users\criis\Documents\Coding"
+    ruta_completa = r"C:\Users\criis\Documents\Coding\Ejemplo Transacciones por report.xlsm"
 #ruta_completa = r"C:\Users\criis\OneDrive\Documentos\Coding\Ejemplo Transacciones por report.xlsm"
 Timer0 = time.time()
 print(f"Usando el archivo {ruta_completa}")
 
 
 ##Objetos base antes de iterar:
-print("ruta completa = " + ruta_completa)
-exit()
 lectura = zipfile.ZipFile(ruta_completa, "r")
-
 sharedstring_xml = lectura.read("xl/sharedStrings.xml")
 sharedstr_list = []
 ##Creamos una lista con todos los valores de sharedstrings
@@ -58,11 +54,29 @@ lastrow = int(NumBytes) #Transforma a integer
 
 #lettercolumns = ["A","B","C","D","E","F","G","H", "I", "J", "K", "L", "M", "N", "O","P","Q","R","S","T","U","V","W","X","Y","Z"]
 matriz = [[0] * lastcol for i in range(lastrow)]  ##Crea una matriz, redim(1 to Lastrow, 1 to lastcol)
-#pattern = re.compile(r"<v>(.*?)</v>")
-#valores_raw = pattern.findall(sheet_str)
-
-
-
+matriz = []
+row_end = 0
+row_start = sheet_str.find(b'<row r=', row_end)
+col_start = sheet_str.find(b'<c r=',row_start)
+col_end = -1
+for i in range(0, lastrow):
+    lista_var = []
+    row_end = sheet_str.find(b'</row')
+    for j in range(0, lastcol):
+        #col_end = sheet_str.find(b'<c r=', row_start, row_end)
+        col_end = sheet_str.find(b'/', col_start, row_end)
+        text_type = sheet_str.find(b't="s', col_start, col_end)
+        #Más datos aquí...
+        col_start = col_end + 4
+    row_start = row_end + 6 ##</row> + 6
+    col_start = sheet_str.find(b'<c r=', row_start, row_end)
+    
+    #row_end = sheet_str.find(b'<row r =', row_start) -1
+    # row_end = sheet_str.find(b'</row', row_start)
+    # for j in range(0, lastcol): ##Buscaremos cada valor.
+        # columna_actual = ord(j)
+        # col_start = sheet_str.find(b"<c r=")
+        # col_start = sheet_str.find(f'<c r="{columna_actual}',row_start, row_end)
 
 Timer1 = time.time()
 ExecTime = Timer1 - Timer0
