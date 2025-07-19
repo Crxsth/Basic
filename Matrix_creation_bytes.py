@@ -13,6 +13,25 @@ root.withdraw()
 #ruta_completa = r"C:\Users\criis\OneDrive\Documentos\Coding\otros\Ejemplo Datos.xlsm"
 #ruta_completa = r"C:\Users\criis\OneDrive\Documentos\Coding\Ejemplo Transacciones por report.xlsm"
 
+##Esto de abajo busca mostrar la información al final
+def show_info():
+    from tkinter import simpledialog
+    respuesta = messagebox.askyesnocancel("Impresión de datos.", "¿Desea imprimir la matriz?")
+    if respuesta is True:
+        import sys
+        ubicacion_inicial = simpledialog.askinteger("Fila inicial", "¿Desde qué fila quieres imprimir?") or 1
+        ubicacion_objetivo = simpledialog.askinteger("Fila final", "¿Hasta qué fila quieres imprimir?") or 20
+        #ubicacion_objetivo = int(input("Rows final: "))+1 ##Esto te pregunta hasta qué row quieres extraer
+        #print(matriz[0])
+        print("\t".join(str(valor) for valor in matriz[0]))
+        for i in range(ubicacion_inicial, ubicacion_objetivo+ubicacion_inicial):
+            #print(matriz[i])
+            fila = [str(valor) for valor in matriz[i]]
+            print("\t".join(fila))
+    else:
+        pass
+
+
 ruta_completa = filedialog.askopenfilename(
     initialdir=r"C:\Users\criis\Documents\Coding",
     title="Selecciona el archivo de Excel",
@@ -53,24 +72,39 @@ lastcol = ord(lastcol) - 64
 lastrow = int(NumBytes) #Transforma a integer
 
 #lettercolumns = ["A","B","C","D","E","F","G","H", "I", "J", "K", "L", "M", "N", "O","P","Q","R","S","T","U","V","W","X","Y","Z"]
-matriz = [[0] * lastcol for i in range(lastrow)]  ##Crea una matriz, redim(1 to Lastrow, 1 to lastcol)
+#matriz = [[0] * lastcol for i in range(lastrow)]  ##Crea una matriz, redim(1 to Lastrow, 1 to lastcol)
 matriz = []
 row_end = 0
-row_start = sheet_str.find(b'<row r=', row_end)
-col_start = sheet_str.find(b'<c r=',row_start)
-col_end = -1
+count = 0
+row_start = sheet_xml.find(b'<row r=', row_end)
+# col_start = sheet_xml.find(b'<c r=',row_start)
+#col_end = sheet_xml.find(b'<c', col_start, row_end)
+##Deseaba referenciar una sacción en el xml para sobre él buscar y evitar varios '.find'; o simplemente usar varios buscar.
+
 for i in range(0, lastrow):
     lista_var = []
-    row_end = sheet_str.find(b'</row')
-    for j in range(0, lastcol):
-        #col_end = sheet_str.find(b'<c r=', row_start, row_end)
-        col_end = sheet_str.find(b'/', col_start, row_end)
-        text_type = sheet_str.find(b't="s', col_start, col_end)
-        #Más datos aquí...
-        col_start = col_end + 4
-    row_start = row_end + 6 ##</row> + 6
-    col_start = sheet_str.find(b'<c r=', row_start, row_end)
-    
+    row_end = sheet_xml.find(b'</row', row_start)
+    col_start = sheet_xml.find(b'<c r=',row_start)
+    # print(f"Row = {sheet_xml[row_start:row_end+3].decode('utf-8')}")
+    while col_start != -1:
+        col_end = sheet_xml.find(b'/', col_start, row_end)+2 ##Esto es lo que haría normalmente, definir inicio y fin.
+        # print(f"Col data = {sheet_xml[col_start:col_end].decode("utf-8")}")
+        text_type = sheet_xml.find(b't="s', col_start, col_end)
+        pos1 = sheet_xml.find(b'<v>', col_start, col_end)
+        pos2 = sheet_xml.find(b'</v', pos1, col_end)
+        strvar = sheet_xml[pos1+3:pos2].decode('utf-8')
+        if pos1 == -1:
+            strvar = 0
+        if text_type == -1: ##si es integer...
+            strvar = int(strvar)
+        else:
+            strvar = sharedstr_list[int(strvar)]
+        lista_var.append(strvar)
+        count = count + 1
+        if count > 10000000:
+            exit()
+        col_start = sheet_xml.find(b'<c r=', col_end, row_end)
+    row_start = row_end + 3 ##</row> + 6
     #row_end = sheet_str.find(b'<row r =', row_start) -1
     # row_end = sheet_str.find(b'</row', row_start)
     # for j in range(0, lastcol): ##Buscaremos cada valor.
@@ -109,11 +143,6 @@ for i in range(0, lastrow):
 ##Convertimos a Dataframe y en caso de necesitar un 
 #df_matriz = pd.DataFrame(matriz)
 
-def main():
-    pass
-if __name__ == '__main__':
-    main()
-
 print("\n")
 print(f"Lectura de archivo completa, la información se guardó como [Matriz] & [df_matriz], como matriz & dataframes respectivamente")
 #print(df_matriz.iloc[0:10])
@@ -124,25 +153,11 @@ ExecTime = Timer1 - Timer0
 print(ExecTime)
 #exit()
 print(f"Iteraciones totales = {count:,.0f}")
-
-
-##Esto de abajo busca mostrar la información al final
-from tkinter import simpledialog
-respuesta = messagebox.askyesnocancel("Impresión de datos.", "¿Desea imprimir la matriz?")
-if respuesta is True:
-    import sys
-    ubicacion_inicial = simpledialog.askinteger("Fila inicial", "¿Desde qué fila quieres imprimir?") or 1
-    ubicacion_objetivo = simpledialog.askinteger("Fila final", "¿Hasta qué fila quieres imprimir?") or 20
-    #ubicacion_objetivo = int(input("Rows final: "))+1 ##Esto te pregunta hasta qué row quieres extraer
-    #print(matriz[0])
-    print("\t".join(str(valor) for valor in matriz[0]))
-    for i in range(ubicacion_inicial, ubicacion_objetivo+ubicacion_inicial):
-        #print(matriz[i])
-        fila = [str(valor) for valor in matriz[i]]
-        print("\t".join(fila))
-else:
-    pass
-
-
 print("-- End -- ")
 print("\n")
+
+def main():
+    pass
+if __name__ == '__main__':
+    main()
+
