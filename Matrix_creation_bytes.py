@@ -112,37 +112,6 @@ for i in range(0, lastrow):
         # col_start = sheet_str.find(b"<c r=")
         # col_start = sheet_str.find(f'<c r="{columna_actual}',row_start, row_end)
 
-Timer1 = time.time()
-ExecTime = Timer1 - Timer0
-print(ExecTime)
-exit()
-##Esto es lo que da estructura a la matriz
-matriz = []
-for i in range(0, lastrow):
-    lista_var = []
-    row_start = sheet_str.find(f'<row r="{i+1}', row_end)
-    row_end = sheet_str.find("</row", row_start)
-    for j in range(0, lastcol): ##Ahora, buscaremos cada valor
-        columna_actual = lettercolumns[j]
-        col_start = sheet_str.find(f'<c r="{columna_actual}',row_start, row_end)
-        col_end = sheet_str.find('</c>', col_start, row_end)
-        pos1 = sheet_str.find('<v>', col_start, col_end)
-        pos2 = sheet_str.find('</v>', pos1, col_end)
-        text_type = sheet_str.find('t="s', col_start, pos1)
-        strvar = sheet_str[pos1+3:pos2]
-        if text_type == -1: ##si es integer...
-            strvar = int(strvar)
-        else: ##Si es string...
-            strvar = sharedstr_list[int(strvar)]
-        lista_var.append(strvar)
-        #matriz[i][j] = strvar
-        count = count + 1
-        if count > 50000000:
-            break
-    matriz.append(lista_var)
-##Convertimos a Dataframe y en caso de necesitar un 
-#df_matriz = pd.DataFrame(matriz)
-
 print("\n")
 print(f"Lectura de archivo completa, la información se guardó como [Matriz] & [df_matriz], como matriz & dataframes respectivamente")
 #print(df_matriz.iloc[0:10])
