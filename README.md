@@ -11,6 +11,7 @@ It takes 1.458s on average to read 1.050 Million cells.
 I started this project because with pandas and other libraries (that at the time I didn't know very well) take up to 20s just to read the excel.
 
 
+
 ## How does this work?
 - We use 'tkinter' to select a file (we can't change this to save 0.2s).
 - It creates a list of lists (I call it as 'matrix') of all the strings of the excel.
@@ -28,10 +29,12 @@ I started this project because with pandas and other libraries (that at the time
 
 ## Personalización
 - It's expected to define a file path to use instead of use the tkinter.
+- It's not expected to read a file with multiple sheets (I haven't thought about it until now, July 22, 2025).
 
-- Puedes modificar el archivo para elegir otra hoja (`sheet2.xml`, etc.).
-- Si necesitas solo algunas columnas, ajusta la lógica de búsqueda de celdas.
-- Si quieres exportar los resultados, puedes convertir la matriz a CSV o DataFrame.
+#Hardware:
+- Laptop: Asus Vivovook Go 15
+- CPU: AMD Ryzen 5 7520u with Radeon Graphics (8 CPUs), ~2.8GHz
+- 16GB RAM
 
 ## Ejemplo de uso
 ```python
