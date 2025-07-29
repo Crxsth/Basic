@@ -96,7 +96,7 @@ for i in range(0, lastrow):
         if pos1 == -1:
             strvar = 0
         if text_type == -1: ##si es integer...
-            strvar = int(strvar)
+            strvar = float(strvar)
         else:
             strvar = sharedstr_list[int(strvar)]
         lista_var.append(strvar)
@@ -124,9 +124,7 @@ print(ExecTime)
 print(f"Iteraciones totales = {count:,.0f}")
 print("-- End -- ")
 print("\n")
-
 def main():
     pass
 if __name__ == '__main__':
     main()
-
