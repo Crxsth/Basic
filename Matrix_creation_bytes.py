@@ -1,7 +1,9 @@
 """
-2025.05.19.
+2025.07.28.
 El objetivo de este módulo es almacenar los valores de un excel.
-Se busca iterar el xml 'sheet1' e ir agregando los valores a una lista_var. Y al cambiar de row, añadirla a matriz y luego lista_var = []
+
+Se harán cambios ya que hay 2 formas de guardar xmls. (ECMA 376, 4th edition, part 1)
+Actualmente tenemos 'sharedstrings' y falta 'inline strings'
 """
 import zipfile
 import time
