@@ -8,22 +8,49 @@ Se busca iterar el xml 'sheet1' e ir agregando los valores a una lista_var. Y al
 """
 import zipfile
 import time
+import tkinter as tk
+from tkinter import messagebox, simpledialog, ttk
+import matplotlib.pyplot as plt
+
     
-##Esto de abajo busca mostrar la información al final | 25.08.07. ni idea we
-def show_info():
-    from tkinter import simpledialog
-    respuesta = messagebox.askyesnocancel("Impresión de datos.", "¿Desea imprimir la matriz?")
-    if respuesta is True:
-        import sys
-        ubicacion_inicial = simpledialog.askinteger("Fila inicial", "¿Desde qué fila quieres imprimir?") or 1
-        ubicacion_objetivo = simpledialog.askinteger("Fila final", "¿Hasta qué fila quieres imprimir?") or 20
-        #ubicacion_objetivo = int(input("Rows final: "))+1 ##Esto te pregunta hasta qué row quieres extraer
-        print("\t".join(str(valor) for valor in matriz[0]))
-        for i in range(ubicacion_inicial, ubicacion_objetivo+ubicacion_inicial):
-            fila = [str(valor) for valor in matriz[i]]
-            print("\t".join(fila))
-    else:
-        pass
+
+def show_info(): ##Lo dió chatgpt 100%. Es para mostrar la matriz.
+    for fila in matriz[:20]:
+        print(fila)
+    # MAX_ROWS = 20
+    # root = tk.Tk(); root.withdraw()
+
+    # resp = messagebox.askyesnocancel("Impresión de datos", "¿Desea imprimir la matriz?", parent=root)
+    # if resp is not True:
+        # root.destroy(); return
+    # if not matriz or not isinstance(matriz[0], (list, tuple)):
+        # messagebox.showwarning("Aviso", "La matriz está vacía o no es válida.", parent=root)
+        # root.destroy(); return
+
+    # ini = simpledialog.askinteger("Fila inicial", "¿Desde qué fila quieres imprimir? (mín=1)", minvalue=1, initialvalue=1, parent=root)
+    # if ini is None:
+        # root.destroy(); return
+    # fin = simpledialog.askinteger("Fila final", "¿Hasta qué fila quieres imprimir?",
+                                  # minvalue=ini,
+                                  # initialvalue=min(ini + MAX_ROWS - 1, len(matriz) - 1),
+                                  # parent=root)
+    # if fin is None:
+        # root.destroy(); return
+
+    # fin = min(fin, len(matriz) - 1, ini + MAX_ROWS - 1)
+    # headers = [str(v) for v in matriz[0]]
+    # data = [[str(v) for v in row] for row in matriz[ini:fin + 1]]
+    # root.destroy()
+
+    # fig, ax = plt.subplots(figsize=(min(12, 1.2 * len(headers)), 0.6 * (len(data) + 2)))
+    # ax.axis('off')
+    # tbl = ax.table(cellText=data, colLabels=headers, loc='center')
+    # tbl.auto_set_font_size(False)
+    # tbl.set_fontsize(9)
+    # tbl.scale(1, 1.2)
+    # ax.set_title(f"Matriz filas {ini}-{fin} (máx {MAX_ROWS})", pad=10)
+    # plt.tight_layout()
+    # plt.show()
 
 def leer_file(ruta_completa):
     print(f"Usando el archivo {ruta_completa}")
@@ -33,7 +60,7 @@ def leer_file(ruta_completa):
     sharedstr_list = []
     ##Creamos una lista con todos los valores de sharedstrings
     import re
-    pattern = re.compile(b'<t>(.*?)</t>') 
+    pattern = re.compile(b'<t[^>]*>(.*?)</t>')
     valores_en_bytes = pattern.findall(sharedstring_xml)
     for v in valores_en_bytes:
         sharedstr_list.append(v.decode('utf-8'))
@@ -135,11 +162,13 @@ if __name__ == '__main__':
     
     Timer0 = time.time()
     matriz = leer_file(ruta_completa)
-    print("\n")
     Timer1 = time.time()
+    print("\n")
+    show_info()
+    
     ExecTime = Timer1 - Timer0
     print(f"Lectura de archivo completa, la información se guardó como [matriz]")
-    print(ExecTime)
+    print(f"Tiempo de lectura: {ExecTime}")
 
 
     
